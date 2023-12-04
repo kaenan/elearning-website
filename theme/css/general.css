@@ -1,0 +1,54 @@
+.pageheader {
+  width: 100%;
+  height: 80px;
+  background-color: #89b3f7;
+  border-bottom: 5px solid #4c83db;
+  display: flex; }
+
+.header-logo {
+  display: flex;
+  margin: 0rem 3rem;
+  flex-wrap: wrap;
+  align-content: center; }
+
+.navigation-buttons {
+  display: flex; }
+  .navigation-buttons .nav-button {
+    margin: 0rem 0.7rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 0px solid black;
+    color: black;
+    text-decoration: none;
+    transition: all 0.1s; }
+  .navigation-buttons .nav-button:hover {
+    cursor: pointer;
+    border-bottom: 3px solid black; }
+
+#page-footer {
+  height: 100px;
+  background-color: #003867; }
+
+.login-container {
+  max-width: 500px;
+  width: 500px; }
+  .login-container form {
+    display: flex;
+    flex-direction: column; }
+
+body {
+  margin: 0px;
+  display: flex;
+  flex-direction: column; }
+
+#main-content {
+  background-color: #f0f0f0;
+  min-height: 770px; }
+
+#inner-content {
+  background-color: white;
+  margin: 2rem 5rem;
+  min-height: 770px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center; }

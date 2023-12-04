@@ -1,0 +1,25 @@
+@import "theme/css/colours";
+@import "theme/css/header";
+@import "theme/css/footer";
+@import "theme/css/login";
+
+body {
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+#main-content {
+    background-color: rgb(240, 240, 240);
+    min-height: 770px;
+}
+
+#inner-content {
+    background-color: white;
+    margin: 2rem 5rem;
+    min-height: 770px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
