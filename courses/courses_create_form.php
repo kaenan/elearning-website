@@ -1,5 +1,5 @@
 <?php
-require_once('custom_form.php');
+require_once(dirname(__DIR__).'/custom_form.php');
 class create_course_form extends custom_form {
 
     function create_form() {

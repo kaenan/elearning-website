@@ -49,6 +49,4 @@ body {
   background-color: white;
   margin: 2rem 5rem;
   min-height: 770px;
-  border-radius: 20px;
-  display: flex;
-  justify-content: center; }
+  border-radius: 20px; }

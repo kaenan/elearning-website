@@ -1,22 +1,33 @@
 <?php
-
 class core_renderer {
 
-    static function header() {
+    protected $root;
 
+    function __construct()
+    {
+        $this->root = '';
+        $count = count(explode('/', $_SERVER['REQUEST_URI'])) - 3;
+        while($count > 0) {
+            $this->root .= '../';
+            $count--;
+        }
+    }
+
+    function header() {
+        $csslink= $this->root.'theme/css/general.css';
         $html =
-        '<link rel="stylesheet" href="theme/css/general.css">
+        '<link rel="stylesheet" href="'.$csslink.'">
         <header id="page-header">
             <div class="pageheader">
                 <div class="header-logo">
                     <p>ELearning Website</p>
                 </div>
                 <div class="navigation-buttons">
-                    <a class="nav-button" href="index.php">Dashboard</a>
-                    <a class="nav-button" href="courses.php">Courses</a>
+                    <a class="nav-button" href="'.$this->root.'index.php">Dashboard</a>
+                    <a class="nav-button" href="'.$this->root.'courses/courses.php">Courses</a>
                 </div>
                 <div>
-                    <form method="post" action="index.php">
+                    <form method="post" action="'.$this->root.'index.php">
                         <input type="hidden" name="action" value="logout">
                         <input type="submit" value="Logout">
                     </form>
@@ -37,7 +48,7 @@ class core_renderer {
         return $html;
     }
 
-    static function footer() {
+    function footer() {
         return 
         '</div>
         </div>
@@ -104,5 +115,83 @@ class core_renderer {
         $html .= '<input type="submit" value="'.$label.'">';
 
         return $html;
+    }
+}
+
+class html_table {
+
+    public array $headers;
+
+    private array $rows;
+
+    function __construct()
+    {
+        $this->headers = array();
+        $this->rows = array();
+    }
+
+    function new_row(html_row $row) {
+        // $html = '<tr>';
+
+        // foreach($row as $d) {
+        //     $html .= '<td>'.$d.'</td>';
+        // }
+        // $html .= '</tr>';
+
+        // $this->rows[] = $html;
+        $this->rows[] = $row;
+    }
+
+    function print_table() {
+
+        $html = '<table>';
+
+        $html .= '<tr>';
+        foreach($this->headers as $head) {
+            $html .= '<th>'.$head.'</th>';
+        }
+        $html .= '</tr>';
+
+        foreach($this->rows as $row) {
+            $html .= '<tr>';
+            foreach($row->get_row_data() as $cell) {
+                $html .= '<td>'.$cell->get_cell_data().'</td>';
+            }
+            $html .= '</tr>';
+        }
+
+        return $html . '</table>';
+    }
+}
+
+class html_row {
+
+    private array $cells;
+
+    function __construct($array = array())
+    {
+        $this->cells = $array;
+    }
+
+    function add_cell(html_cell $cell) {
+        $this->cells[] = $cell->get_cell_data();
+    }
+
+    function get_row_data() {
+        return $this->cells;
+    }
+}
+
+class html_cell {
+
+    private string $cell;
+    
+    function __construct(string $data)
+    {
+        $this->cell = $data;
+    }
+    
+    function get_cell_data() {
+        return $this->cell;
     }
 }

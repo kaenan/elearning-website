@@ -21,7 +21,7 @@ if ($action == 'login') {
 }
 
 if (isset($_SESSION['sesskey'])) {
-    header('Location: courses.php');
+    header('Location: courses/courses.php');
 }
 
 echo $OUTPUT->header();

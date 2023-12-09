@@ -1,5 +1,5 @@
 <?php
-require('core_renderer.php');
+require_once(dirname(__DIR__).'/core_renderer.php');
 
 // Start session.
 session_start();

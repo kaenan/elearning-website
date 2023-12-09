@@ -1,16 +1,19 @@
 <?php
 class custom_form {
 
+    private $formid;
+
     private $html;
 
     private $data;
 
-    function __construct()
+    function __construct($formid)
     {
         $this->html = '';
         $this->data = array();
         $this->set_data();
         $this->create_form();
+        $this->formid = $formid;
     }
 
     /**
@@ -69,7 +72,7 @@ class custom_form {
         return 
         '<form method="post">' .
         $this->html .
-        '<input type="hidden" name="forsubmitted" value="1">
+        '<input type="hidden" name="formsubmitted" value="'.$this->formid.'">
         </form>';
     }
 
@@ -79,10 +82,11 @@ class custom_form {
      * @return object|bool $data - Posted data as object. False if no data posted.
      */
     function get_data() {
-        if (isset($this->data['forsubmitted'])) {
-            return $this->data;
-        } else {
-            return false;
+        if (isset($this->data['formsubmitted'])) {
+            if ($this->data['formsubmitted'] == $this->formid) {
+                return $this->data;
+            }
         }
+        return false;
     }
 }

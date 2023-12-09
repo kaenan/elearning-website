@@ -1,7 +1,6 @@
 <?php
-
-require_once('settings/settings.php');
-require_once('settings/lib.php');
+require_once(dirname(__DIR__).'/settings/settings.php');
+require_once(dirname(__DIR__).'/settings/lib.php');
 
 check_loggedin();
 
