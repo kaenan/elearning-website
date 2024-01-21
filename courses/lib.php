@@ -78,6 +78,21 @@ function get_courses($categoryid = null) {
     }
 }
 
+function get_course($id) {
+    global $DB;
+
+    $sql =
+    " SELECT id, name
+        FROM courses
+       WHERE id = $id";
+
+    if ($data = $DB->query($sql)) {
+        return mysqli_fetch_object($data);
+    }
+
+    return false;
+}
+
 /**
  * get_categories - Get categories with id.
  * 
@@ -94,8 +109,16 @@ function get_categories($categoryid = 0) {
     ORDER BY sortorder";
 
     if ($data = $DB->query($sql)) {
-        return mysqli_fetch_all($data);
+        $data = mysqli_fetch_all($data);
+
+        if (sizeof($data) > 0) {
+            return $data;
+        } else {
+            return false;
+        }
     }
+
+    return false;
 }
 
 /**
@@ -115,7 +138,7 @@ function get_all_categories() {
     $data = mysqli_fetch_all($DB->query($sql));
 
     if ($data) {
-        $categories = array();
+        $categories = array(0 => 'root');
         foreach ($data as $d) {
             $categories[$d[0]] = $d[1];
         }
@@ -123,24 +146,32 @@ function get_all_categories() {
         return $categories;
     }
 
-    return false;
-
-    // if ($data = $DB->query($sql)) {
-    //     return mysqli_fetch_all($data);
-    // }
+    return array(0 => 'root');
 }
 
-function course_category_thumbnail($name, $category = null) {
+function course_category_thumbnail($name, $id, $coursethumbnail = false) {
 
-    $html = html_writer::start_tag('div', array('style' => 'width:200px; display:flex; justify-content:center;'));
+    $html = html_writer::start_tag('div', 
+        array('style' => 'width:200px;
+                            height:150px;
+                            display:flex;
+                            justify-content:center;
+                            align-content:center;
+                            flex-wrap:wrap;
+                            border: 2px solid black;
+                            border-radius: 10px;
+                            margin-bottom: 10px;'));
 
-    $url = '#?';
-    if(isset($category)) {
-        "category=$category";
-    } 
+    if ($coursethumbnail == 0) {
+        $url = "?category=$id";
+    } else {
+        $url = "course.php?c=$id";
+    }
 
     $html .= html_writer::start_tag('a', array('href' => $url));
     $html .= $name;
     $html .= html_writer::end_tag('a');
-    return html_writer::end_tag('div');
+    $html .= html_writer::end_tag('div');
+
+    return $html;
 }

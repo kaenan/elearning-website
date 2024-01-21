@@ -52,7 +52,7 @@ function logout() {
 
 function check_loggedin() {
     if (!isset($_SESSION['username']) || !isset($_SESSION['sesskey'])) {
-        header('Location: index.php');
+        header('Location: /elearningweb/index.php');
         die;
     }
 }
@@ -85,4 +85,8 @@ function createsession($data, $sesskey) {
  */
 function post_parameter($parameter, $default = null) {
     return isset($_POST[$parameter]) ? $_POST[$parameter] : $default;
+}
+
+function get_parameter($parameter, $default = null) {
+    return isset($_GET[$parameter]) ? $_GET[$parameter] : $default;
 }
