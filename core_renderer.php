@@ -116,7 +116,15 @@ class core_renderer {
 
         return $html;
     }
+
+    static function add_js($filepath) {
+        return '<script src="'.$filepath.'"></script>';
+    }
 }
+
+/**
+ * Creating html table functions.
+ */
 
 class html_table {
 
@@ -131,14 +139,6 @@ class html_table {
     }
 
     function new_row(html_row $row) {
-        // $html = '<tr>';
-
-        // foreach($row as $d) {
-        //     $html .= '<td>'.$d.'</td>';
-        // }
-        // $html .= '</tr>';
-
-        // $this->rows[] = $html;
         $this->rows[] = $row;
     }
 
@@ -193,5 +193,111 @@ class html_cell {
     
     function get_cell_data() {
         return $this->cell;
+    }
+}
+
+class html_list_item {
+
+    private object $item;
+
+    function __construct(string $label, array $attributes)
+    {
+        $this->item = new stdClass;
+        $this->item->label = $label;
+        $this->item->attributes = $attributes;
+    }
+
+    function get() {
+        return $this->item;
+    }
+}
+
+class html_description_list {
+
+    private $html;
+
+    private $terms;
+
+    private array $descriptions;
+
+    function __construct()
+    {
+        $this->html = '';
+        $this->terms = array();
+        $this->descriptions = array();
+    }
+
+    function add_term(html_list_item $term) {
+        $this->terms[] = $term;
+    }
+
+    function add_description(html_list_item $description) {
+        $this->descriptions[] = $description;
+    }
+
+    function print_list() {
+        $this->html .= '<dl>';
+        
+        foreach($this->terms as $term) {
+            $this->html .= '<dt ';
+            
+            foreach($term->get()->attributes as $key => $val) {
+                $this->html .= $key . '="'. $val .'"';
+            }
+            
+            $this->html .= '>'.$term->get()->label.'</dt>';
+        }
+
+        foreach($this->descriptions as $d) {
+            $this->html .= '<dd></dd>';
+        }
+
+        return $this->html .= '</dl>';
+    }
+}
+
+class html_buttom {
+
+    private $html;
+
+    private $label;
+
+    private $attributes;
+
+    function __construct($label, $attributes)
+    {
+        $this->html = '';
+        $this->label = $label;
+        $this->attributes = $attributes;
+    }
+
+    function print_button() {
+
+        $this->html = '<button ';
+
+        foreach ($this->attributes as $key => $val) {
+            $this->html .= $key . '="' . $val . '" ';
+        }
+
+        $this->html .= '>' . $this->label . '</button>';
+
+        return $this->html;
+    }
+}
+
+class html_writer {
+
+    static function start_tag($tag, $attributes = array()) {
+        $html = "<" . $tag;
+
+        foreach($attributes as $key => $val) {
+            $html .= " $key=\"$val\"";
+        }
+
+        return $html . ">";
+    }
+
+    static function end_tag($tag) {
+        return "</$tag>";
     }
 }

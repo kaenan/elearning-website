@@ -77,79 +77,12 @@ function createsession($data, $sesskey) {
     $_SESSION['sesskey'] = $sesskey;
 }
 
-function post_parameter($parameter) {
-    return isset($_POST[$parameter]) ? $_POST[$parameter] : null;
-}
-
-function create_course(int $categoryid, string $name, string $description) {
-    global $DB;
-
-    $sql =
-       "SELECT id, sortorder
-          FROM courses
-         WHERE categoryid = $categoryid
-      ORDER BY sortorder DESC
-         LIMIT 1";
-
-    if (($success = $DB->query($sql)) !== false) {
-        $record = mysqli_fetch_object($success);
-        if ($record !== false) {
-            $order = $record->sortorder + 1;
-        } else {
-            $order = 0;
-        }
-    } else {
-        return false;
-    }
-
-    $created = time();
-
-    $sql =
-    "INSERT INTO courses (categoryid, name, description, sortorder, created)
-                 VALUES($categoryid, '$name', '$description', $order, $created)";
-
-    return $DB->query($sql);
-}
-
-function create_category(int $categoryid, string $name, string $description) {
-    global $DB;
-
-    $sql =
-       "SELECT id, sortorder
-          FROM courses_categories
-         WHERE categoryid = $categoryid
-      ORDER BY sortorder DESC
-         LIMIT 1";
-
-    if (($success = $DB->query($sql)) !== false) {
-        $record = mysqli_fetch_object($success);
-        if ($record !== false) {
-            $order = $record->sortorder + 1;
-        } else {
-            $order = 0;
-        }
-    } else {
-        return false;
-    }
-
-    $created = time();
-
-    $sql =
-    "INSERT INTO courses_categories (categoryid, name, description, sortorder, created)
-                 VALUES($categoryid, '$name', '$description', $order, $created)";
-
-    return $DB->query($sql);
-}
-
-function get_courses() {
-    global $DB;
-
-    $sql =
-    " SELECT id, name
-        FROM courses
-    ORDER BY sortorder";
-
-    if ($data = $DB->query($sql)) {
-        return mysqli_fetch_all($data);
-    }
+/**
+ * post_parameter - Checks for POST data.
+ * 
+ * @param string $parameter - The parameter to check.
+ * @return null|mixed $data - POST data. Null if none found.
+ */
+function post_parameter($parameter, $default = null) {
+    return isset($_POST[$parameter]) ? $_POST[$parameter] : $default;
 }
