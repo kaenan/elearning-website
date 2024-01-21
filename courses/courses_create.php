@@ -5,7 +5,7 @@ require_once('courses_create_form.php');
 require_once('category_create_form.php');
 
 $form = new create_course_form('courseform');
-$categoryform = new create_category_form('categoryform');
+$categoryform = new create_category_form('categoryform', array('categories' => get_all_categories()));
 
 // Check if form data submitted.
 if ($data = $form->get_data()) {

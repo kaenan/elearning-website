@@ -4,6 +4,8 @@ class create_category_form extends custom_form {
 
     function create_form() {
 
+        $categories = $this->formdata['categories'];
+
         $this->add_label('categoryname', 'Category Name');
         $this->add_input('string', 'categoryname', true);
 
@@ -11,7 +13,7 @@ class create_category_form extends custom_form {
         $this->add_input('string', 'description');
 
         $this->add_label('catid', 'CategoryID');
-        $this->add_input('number', 'catid');
+        $this->add_input('select', 'catid', false, $categories);
 
         $this->add_submit('Create');
     }

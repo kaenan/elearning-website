@@ -7,12 +7,15 @@ class custom_form {
 
     private $data;
 
-    function __construct($formid)
+    protected $formdata;
+
+    function __construct($formid, array $formdata = null)
     {
         $this->html = '';
+        $this->formdata = $formdata;
         $this->data = array();
         $this->set_data();
-        $this->create_form();
+        $this->create_form($formdata);
         $this->formid = $formid;
     }
 
@@ -44,11 +47,22 @@ class custom_form {
     /**
      * Add_input - Create a form input.
      */
-    protected function add_input(string $type, string $name, $required = false) {
-        if ($required) {
-            $this->html .= '<input type="'.$type.'" name="'.$name.'" required>';
-        } else {
-            $this->html .= '<input type="'.$type.'" name="'.$name.'">';
+    protected function add_input(string $type, string $name, $required = false, $selectoptions = null) {
+
+        $required = $required ? 'required' : '';
+
+        switch($type) {
+
+            case 'select':
+                $this->html .= '<select name="'.$name.'" '.$required.'>';
+                foreach ($selectoptions as $key => $val) {
+                    $this->html .= '<option value="'.$key.'">' . $val . '</option>';
+                }
+                break;
+
+            default:
+                $this->html .= '<input type="'.$type.'" name="'.$name.'" '.$required.'>';
+                break;
         }
     }
 

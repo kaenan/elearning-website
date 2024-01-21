@@ -98,6 +98,38 @@ function get_categories($categoryid = 0) {
     }
 }
 
+/**
+ * get_all_categories - Get all categories ordered by sort order.
+ * 
+ * @param int $categoryid - Category ID.
+ * @return array $data - Array of category data.
+ */
+function get_all_categories() {
+    global $DB;
+
+    $sql =
+    " SELECT id, name
+        FROM courses_categories
+    ORDER BY categoryid, sortorder";
+
+    $data = mysqli_fetch_all($DB->query($sql));
+
+    if ($data) {
+        $categories = array();
+        foreach ($data as $d) {
+            $categories[$d[0]] = $d[1];
+        }
+
+        return $categories;
+    }
+
+    return false;
+
+    // if ($data = $DB->query($sql)) {
+    //     return mysqli_fetch_all($data);
+    // }
+}
+
 function course_category_thumbnail($name, $category = null) {
 
     $html = html_writer::start_tag('div', array('style' => 'width:200px; display:flex; justify-content:center;'));
@@ -111,11 +143,4 @@ function course_category_thumbnail($name, $category = null) {
     $html .= $name;
     $html .= html_writer::end_tag('a');
     return html_writer::end_tag('div');
-
-    // return
-    // "<div style=\"width: 200px; display: flex; justify-content: center;\">
-    //     <a href=\"#\">
-    //         $name
-    //     </a>
-    // </div>";
 }
