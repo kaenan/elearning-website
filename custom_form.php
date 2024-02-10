@@ -66,6 +66,10 @@ class custom_form {
         }
     }
 
+    protected function add_hidden(string $name, $value) {
+        $this->html .= '<input type="hidden" name="'.$name.'" value="'.$value.'">';
+    }
+
     /**
      * Add_submit - Create a form submit button.
      */

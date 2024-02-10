@@ -5,12 +5,14 @@ require_once('lib.php');
 
 check_loggedin();
 
-$id = get_parameter('c');
-
-$course = get_course($id);
+$courseid = get_parameter('courseid');
 
 echo $OUTPUT->header();
-echo $OUTPUT->create_link('Add activity', '../activities/add_activity.php?courseid='.$id);
-echo $course->name;
+
+$activities = get_activities();
+
+foreach ($activities as $a) {
+    echo $a->get_card($courseid);
+}
 
 echo $OUTPUT->footer();
