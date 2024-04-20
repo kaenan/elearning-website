@@ -7,8 +7,13 @@ class quiz extends activity {
         return 'Quiz';
     }
 
-    function activity_url() {
+    function create_url() {
 
         return 'quiz/create_quiz.php';
+    }
+
+    function activity_url() {
+
+        return '../activities/quiz/quiz_activity.php';
     }
 }

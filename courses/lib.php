@@ -73,9 +73,7 @@ function get_courses($categoryid = null) {
     
     $sql .= " ORDER BY sortorder";
 
-    if ($data = $DB->query($sql)) {
-        return mysqli_fetch_all($data);
-    }
+    return $DB->get_records_sql($sql);
 }
 
 function get_course($id) {
@@ -86,8 +84,8 @@ function get_course($id) {
         FROM courses
        WHERE id = $id";
 
-    if ($data = $DB->query($sql)) {
-        return mysqli_fetch_object($data);
+    if ($data = $DB->get_record('courses', ['id' => $id], 'id, name')) {
+        return $data;
     }
 
     return false;
@@ -102,20 +100,8 @@ function get_course($id) {
 function get_categories($categoryid = 0) {
     global $DB;
 
-    $sql =
-    " SELECT id, name, categoryid
-        FROM courses_categories
-       WHERE categoryid = $categoryid
-    ORDER BY sortorder";
-
-    if ($data = $DB->query($sql)) {
-        $data = mysqli_fetch_all($data);
-
-        if (sizeof($data) > 0) {
-            return $data;
-        } else {
-            return false;
-        }
+    if ($data = $DB->get_records('courses_categories', ['categoryid' => $categoryid], 'id, name, categoryid', 'sortorder')) {
+        return $data;
     }
 
     return false;
@@ -130,17 +116,10 @@ function get_categories($categoryid = 0) {
 function get_all_categories() {
     global $DB;
 
-    $sql =
-    " SELECT id, name
-        FROM courses_categories
-    ORDER BY categoryid, sortorder";
-
-    $data = mysqli_fetch_all($DB->query($sql));
-
-    if ($data) {
+    if ($data = $DB->get_records('courses_categories', null, 'id, name', 'categoryid, sortorder')) {
         $categories = array(0 => 'root');
         foreach ($data as $d) {
-            $categories[$d[0]] = $d[1];
+            $categories[$d->id] = $d->name;
         }
 
         return $categories;
@@ -174,4 +153,44 @@ function course_category_thumbnail($name, $id, $coursethumbnail = false) {
     $html .= html_writer::end_tag('div');
 
     return $html;
+}
+
+function get_activities($courseid) {
+    global $DB;
+
+    $sql =
+    "SELECT ca.id, ca.name AS activityname, a.name AS name 
+       FROM course_activities ca
+       JOIN activities a ON ca.activityid = a.id
+      WHERE ca.courseid = {$courseid}";
+
+    // if ($success = $DB->query($sql)) {
+    //     if (count($data = mysqli_fetch_all($success)) > 0) {
+
+    //         $activities = [];
+    //         foreach ($data as $d) {
+    //             require_once(dirname(__DIR__) . '/activities/' . $d[2] . '/activity.php');
+    //             $activity = new $d[2]();
+    //             $activities[] = $activity->get_activity_card($d[0], $d[1]);
+    //         }
+
+    //         return $activities;
+    //     }
+    // }
+
+    if ($data = $DB->get_records_sql($sql)) {
+        if (count($data) > 0) {
+
+            $activities = [];
+            foreach ($data as $d) {
+                require_once(dirname(__DIR__) . '/activities/' . $d->name . '/activity.php');
+                $activity = new ($d->name)();
+                $activities[] = $activity->get_activity_card($d->id, $d->activityname);
+            }
+
+            return $activities;
+        }
+    }
+
+    return false;
 }

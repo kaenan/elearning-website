@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__DIR__).'/core_renderer.php');
+require_once(dirname(__DIR__).'/database.php');
 
 // Start session.
 session_start();
@@ -11,5 +12,6 @@ $db_pass = "";
 $db_name = "elearningwebsite";
 
 // Global variables.
-$GLOBALS['DB'] = mysqli_connect($db_server, $db_user, $db_pass, $db_name); // Database connection.
+// $GLOBALS['DB'] = mysqli_connect($db_server, $db_user, $db_pass, $db_name); // Database connection.
+$GLOBALS['DB'] = new database($db_server, $db_user, $db_pass, $db_name); // Database connection.
 $GLOBALS['OUTPUT'] = new core_renderer; // HTML class render.

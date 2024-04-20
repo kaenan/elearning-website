@@ -4,9 +4,7 @@ require_once('../lib.php');
 function create_activity($data) {
     global $DB;
 
-    $activityid = create_activity_record('quiz');
-
-   // echo var_dump($data); die;
+    $activityid = get_activity_id('quiz');
 
     $sql =
     "INSERT INTO course_activities (courseid, activityid, sortorder, name)

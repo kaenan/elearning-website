@@ -8,9 +8,19 @@ check_loggedin();
 $id = get_parameter('c');
 
 $course = get_course($id);
+$activites = get_activities($id);
 
 echo $OUTPUT->header();
 echo $OUTPUT->create_link('Add activity', '../activities/add_activity.php?courseid='.$id);
+echo '<br>';
 echo $course->name;
+echo '<br>';
+
+if ($activites) {
+    foreach ($activites as $a) {
+        echo $a . '<br>';
+        echo '<br>';
+    }
+}
 
 echo $OUTPUT->footer();

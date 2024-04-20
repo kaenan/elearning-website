@@ -28,8 +28,8 @@ $courses = get_categories();
 
 $list = new html_description_list;
 foreach ($courses as $c) {
-    $button = new html_buttom($c[1], array('onClick' => 'get_categories(\'category'.$c[0].'\', '.$c[0].')'));
-    $item = new html_list_item($button->print_button(), array('id' => 'category'.$c[0], 'class' => 'unloaded category-link'));
+    $button = new html_buttom($c->name, array('onClick' => 'get_categories(\'category'.$c->id.'\', '.$c->id.')'));
+    $item = new html_list_item($button->print_button(), array('id' => 'category'.$c->id, 'class' => 'unloaded category-link'));
     $list->add_term($item);
 }
 

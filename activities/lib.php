@@ -1,6 +1,6 @@
 <?php
 
-function create_activity_record($name) {
+function get_activity_id($name) {
     global $DB;
 
     $name = strtolower($name);
@@ -8,7 +8,7 @@ function create_activity_record($name) {
     $sql = 
     "SELECT id
        FROM activities
-      WHERE name='$name'";
+      WHERE name = '{$name}'";
 
     if (($success = $DB->query($sql)) !== false) {
         if ($record = mysqli_fetch_object($success)) {
@@ -16,16 +16,7 @@ function create_activity_record($name) {
         }
     }
 
-    $insertsql =
-    "INSERT INTO activities (name)
-          VALUES ('$name')";
-
-    if (!$DB->query($insertsql)) return false;
-
-    if (($success = $DB->query($sql)) !== false) {
-        $record = mysqli_fetch_object($success);
-        return $record->id;
-    }
+    return false;
 }
 
 function get_activities() {

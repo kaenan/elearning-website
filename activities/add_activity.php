@@ -12,7 +12,7 @@ echo $OUTPUT->header();
 $activities = get_activities();
 
 foreach ($activities as $a) {
-    echo $a->get_card($courseid);
+    echo $a->create_activity_card($courseid);
 }
 
 echo $OUTPUT->footer();

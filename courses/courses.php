@@ -17,7 +17,7 @@ echo html_writer::start_tag('h1') . 'Categories' . html_writer::end_tag('h1');
 echo html_writer::start_tag('div', array('style' => 'width:100%; display: flex; justify-content: space-around; flex-wrap: wrap;'));
 if ($categories) {
     foreach($categories as $c) {
-        echo course_category_thumbnail($c[1], $c[0]);
+        echo course_category_thumbnail($c->name, $c->id);
     }
 } else {
     echo 'No categories to show.';
@@ -27,7 +27,7 @@ echo html_writer::end_tag('div');
 echo html_writer::start_tag('h1') . 'Courses' . html_writer::end_tag('h1');
 echo html_writer::start_tag('div', array('style' => 'width:100%; display: flex; justify-content: space-around; flex-wrap: wrap;'));
 foreach($courses as $c) {
-    echo course_category_thumbnail($c[1], $c[0], true);
+    echo course_category_thumbnail($c->name, $c->id, true);
 }
 echo html_writer::end_tag('div');
 

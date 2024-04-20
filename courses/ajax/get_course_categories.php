@@ -13,8 +13,8 @@ $sql =
     WHERE categoryid = $catid
 ORDER BY sortorder";
 
-if ($data = $DB->query($sql)) {
-    echo json_encode(mysqli_fetch_all($data));
+if ($data = $DB->get_records('courses_categories', ['categoryid' => $catid], 'id, name, categoryid', 'sortorder')) {
+    echo json_encode($data);
     die;
 }
 echo false;
