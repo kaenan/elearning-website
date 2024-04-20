@@ -3,31 +3,23 @@
 function create_course(int $categoryid, string $name, string $description) {
     global $DB;
 
-    $sql =
-       "SELECT id, sortorder
-          FROM courses
-         WHERE categoryid = $categoryid
-      ORDER BY sortorder DESC
-         LIMIT 1";
-
-    if (($success = $DB->query($sql)) !== false) {
-        $record = mysqli_fetch_object($success);
-        if ($record !== false) {
-            $order = $record->sortorder + 1;
-        } else {
-            $order = 0;
-        }
+    if ($record = $DB->get_record('courses', ['categoryid' => $categoryid], 'id, sortorder', 'sortorder DESC', 1)) {
+        $order = $record->sortorder + 1;
     } else {
-        return false;
+        $order = 0;
     }
 
     $created = time();
 
-    $sql =
-    "INSERT INTO courses (categoryid, name, description, sortorder, created)
-                 VALUES($categoryid, '$name', '$description', $order, $created)";
+    $DB->insert_record('courses', [
+        'categoryid' => $categoryid,
+        'name' => $name,
+        'description' => $description,
+        'sortorder' => $order,
+        'created' => $created
+    ]);
 
-    return $DB->query($sql);
+    return true;
 }
 
 function create_category(int $categoryid, string $name, string $description) {
@@ -40,24 +32,23 @@ function create_category(int $categoryid, string $name, string $description) {
       ORDER BY sortorder DESC
          LIMIT 1";
 
-    if (($success = $DB->query($sql)) !== false) {
-        $record = mysqli_fetch_object($success);
-        if ($record !== false) {
-            $order = $record->sortorder + 1;
-        } else {
-            $order = 0;
-        }
+    if ($record = $DB->get_record('courses_categories', ['categoryid' => $categoryid], 'id, sortorder', 'sortorder DESC', 1)) {
+        $order = $record->sortorder + 1;
     } else {
-        return false;
+        $order = 0;
     }
 
     $created = time();
 
-    $sql =
-    "INSERT INTO courses_categories (categoryid, name, description, sortorder, created)
-                 VALUES($categoryid, '$name', '$description', $order, $created)";
+    $DB->insert_record('courses_categories', [
+        'categoryid' => $categoryid,
+        'name' => $name,
+        'description' => $description,
+        'sortorder' => $order,
+        'created' => $created
+    ]);
 
-    return $DB->query($sql);
+    return true;
 }
 
 function get_courses($categoryid = null) {
@@ -163,20 +154,6 @@ function get_activities($courseid) {
        FROM course_activities ca
        JOIN activities a ON ca.activityid = a.id
       WHERE ca.courseid = {$courseid}";
-
-    // if ($success = $DB->query($sql)) {
-    //     if (count($data = mysqli_fetch_all($success)) > 0) {
-
-    //         $activities = [];
-    //         foreach ($data as $d) {
-    //             require_once(dirname(__DIR__) . '/activities/' . $d[2] . '/activity.php');
-    //             $activity = new $d[2]();
-    //             $activities[] = $activity->get_activity_card($d[0], $d[1]);
-    //         }
-
-    //         return $activities;
-    //     }
-    // }
 
     if ($data = $DB->get_records_sql($sql)) {
         if (count($data) > 0) {

@@ -12,7 +12,7 @@ class database {
     /**
      * Get a single record from a table as an object.
      */
-    function get_record(string $table, array $conditions = null, string $fields = '*', string $sort = null) {
+    function get_record(string $table, array $conditions = null, string $fields = '*', string $sort = null, string $limit = null) {
 
         $sql =
         "SELECT {$fields} FROM {$table} ";
@@ -20,9 +20,9 @@ class database {
         if (isset($conditions)) {
             foreach ($conditions as $key => $val) {
                 if (reset($conditions) == $val) {
-                    $sql .= " WHERE {$key} = {$val} ";
+                    $sql .= " WHERE {$key} = '{$val}' ";
                 } else {
-                    $sql .= " AND {$key} = {$val} ";
+                    $sql .= " AND {$key} = '{$val}' ";
                 }
             }
         }
@@ -31,9 +31,15 @@ class database {
             $sql .= " ORDER BY {$sort}";
         }
 
-        $result = $this->db->query($sql);
+        if (isset($limit)) {
+            $sql .= " LIMIT {$sort}";
+        }
+
+        if ($result = $this->db->query($sql)) {
+            return $result->fetch_object();
+        }
         
-        return $result->fetch_object();
+        return false;
     }
 
     /**
@@ -47,9 +53,9 @@ class database {
         if (isset($conditions)) {
             foreach ($conditions as $key => $val) {
                 if (reset($conditions) == $val) {
-                    $sql .= " WHERE {$key} = {$val} ";
+                    $sql .= " WHERE {$key} = '{$val}' ";
                 } else {
-                    $sql .= " AND {$key} = {$val} ";
+                    $sql .= " AND {$key} = '{$val}' ";
                 }
             }
         }
@@ -87,5 +93,55 @@ class database {
         }
 
         return false;
+    }
+
+    function insert_record($table, array $params) {
+
+        $sql = "INSERT INTO {$table} ";
+
+        $fields = '(';
+        $values = 'VALUES(';
+
+        $i = 0;
+        foreach ($params as $key => $val) {
+            $v = $this->convert_variable($val);
+            if ($i == 0) {
+                $fields .= $key;
+                $values .= $v;
+            } else {
+                $fields .= ", {$key}";
+                $values .= ", {$v}";
+            }
+            $i++;
+        }
+
+        $fields .= ") ";
+        $values .= ")";
+
+        $sql .= $fields . $values;
+
+        return $this->db->query($sql);
+    }
+
+    private function convert_variable($var) {
+        switch (gettype($var)) {
+            case 'integer':
+                return $var;
+            
+            case 'string':
+                return "'{$var}'";
+
+            case 'double':
+                return "'{$var}'";
+
+            case 'NULL':
+                return "''";
+
+            case 'boolean':
+                return $var;
+
+            default:
+                return $var;
+        }
     }
 }

@@ -6,13 +6,10 @@ function create_activity($data) {
 
     $activityid = get_activity_id('quiz');
 
-    $sql =
-    "INSERT INTO course_activities (courseid, activityid, sortorder, name)
-    VALUES(
-    ".$data['courseid'].",
-    ".$activityid.",
-    1,
-    '".$data['quizname']."')";
-
-    return $DB->query($sql);
+    return $DB->insert_record('course_activities', [
+        'courseid' =>  (integer) $data['courseid'],
+        'activityid' => (integer) $activityid,
+        'sortorder' => 1,
+        'name' => $data['quizname']
+    ]);
 }

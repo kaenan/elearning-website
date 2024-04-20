@@ -10,10 +10,8 @@ function get_activity_id($name) {
        FROM activities
       WHERE name = '{$name}'";
 
-    if (($success = $DB->query($sql)) !== false) {
-        if ($record = mysqli_fetch_object($success)) {
-            return $record->id;
-        }
+    if ($success = $DB->get_record('activities', ['name' => $name], 'id')) {
+        return $success->id;
     }
 
     return false;
