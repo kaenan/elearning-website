@@ -3,6 +3,7 @@ require_once(dirname(dirname(__DIR__)).'/settings/settings.php');
 require_once(dirname(dirname(__DIR__)).'/settings/lib.php');
 require_once('create_quiz_form.php');
 require_once('lib.php');
+require_once('../lib.php');
 
 $courseid = get_parameter('courseid');
 
