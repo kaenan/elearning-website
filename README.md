@@ -1,0 +1,1 @@
+Attempting to create an LMS style web application from scratch. Complete with login / account creation, course creation, various activity types, user roles, management dashboard for user data tracking.
